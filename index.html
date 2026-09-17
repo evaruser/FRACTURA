@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FRACTURA — Plataformas dimensionales</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body class="dim-luz">
+
+  <!-- Capa Phaser (Canvas/WebGL) -->
+  <div id="game-container"></div>
+
+  <!-- Capa HUD: DOM + CSS Animations -->
+  <div id="hud" aria-hidden="true">
+    <div class="hud-left">
+      <div id="vidas" class="vidas"></div>
+      <div id="dim-badge" class="dim-badge">
+        <span class="dim-badge__label">Dimensión</span>
+        <span class="dim-badge__value">LUZ</span>
+      </div>
+    </div>
+
+    <div class="hud-right">
+      <div id="shards" class="shards">
+        <span class="shards__icon"></span>
+        <span class="shards__count">0</span>
+        <span class="shards__total">/ 0</span>
+      </div>
+      <!-- Capa Canvas 2D dibujada a mano -->
+      <canvas id="minimap" width="256" height="96"></canvas>
+    </div>
+  </div>
+
+  <!-- Flash de cambio de dimensión (CSS) -->
+  <div id="flash" class="flash"></div>
+  <!-- Viñeta de daño (CSS) -->
+  <div id="vignette" class="vignette"></div>
+
+  <!-- Menú principal: 100% DOM + CSS Animations -->
+  <div id="menu" class="overlay overlay--menu is-visible">
+    <div class="overlay__inner">
+      <h1 class="titulo" data-texto="FRACTURA">FRACTURA</h1>
+      <p class="subtitulo">Dos dimensiones. Un solo camino.</p>
+      <button id="btn-jugar" class="btn">JUGAR</button>
+      <ul class="controles">
+        <li><kbd>←</kbd><kbd>→</kbd> <span>mover</span></li>
+        <li><kbd>Espacio</kbd> <span>saltar</span></li>
+        <li><kbd>Shift</kbd> <span>cambiar de dimensión</span></li>
+        <li><kbd>R</kbd> <span>reiniciar</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Fin de partida -->
+  <div id="fin" class="overlay overlay--fin">
+    <div class="overlay__inner">
+      <h2 id="fin-titulo" class="fin-titulo">NIVEL COMPLETADO</h2>
+      <p id="fin-texto" class="fin-texto"></p>
+      <button id="btn-reiniciar" class="btn">REINTENTAR</button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

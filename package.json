@@ -1,0 +1,19 @@
+{
+  "name": "juego-urbiola",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Plataformas 2D con cambio de dimension - Canvas + WebGL + CSS Animations + Phaser",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "entrega": "vite build && node scripts/empaquetar.mjs"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
