@@ -1,7 +1,6 @@
 /* Puente entre Phaser y el DOM.
-   Phaser nunca toca el DOM directamente: emite eventos y este
-   modulo se encarga de anadir/quitar clases CSS. Las animaciones
-   son 100% CSS (src/style.css). */
+   Phaser nunca toca estilos directamente: emite eventos y este
+   modulo anade o quita clases CSS. Las animaciones son 100% CSS. */
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -10,19 +9,27 @@ const el = {
   vidas:    $('#vidas'),
   badge:    $('#dim-badge'),
   badgeVal: $('#dim-badge .dim-badge__value'),
+  nivelNum: $('#nivel-hud .nivel-hud__num'),
+  nivelNom: $('#nivel-hud .nivel-hud__nombre'),
   count:    $('#shards .shards__count'),
   total:    $('#shards .shards__total'),
   shards:   $('#shards'),
   flash:    $('#flash'),
   vignette: $('#vignette'),
+  banner:   $('#nivel-banner'),
+  bannerNum:$('#nivel-banner .nivel-banner__num'),
+  bannerNom:$('#nivel-banner .nivel-banner__nombre'),
+  bannerPis:$('#nivel-banner .nivel-banner__pista'),
   menu:     $('#menu'),
   fin:      $('#fin'),
   finTitulo:$('#fin-titulo'),
   finTexto: $('#fin-texto'),
+  btnFin:   $('#btn-fin'),
+  btnSonido:$('#btn-sonido'),
 };
 
-/** Reinicia una animacion CSS: hay que forzar un reflow o,
- *  si la clase ya estaba puesta, el navegador no la re-dispara. */
+/** Reinicia una animacion CSS: hay que forzar un reflow o, si la
+ *  clase ya estaba puesta, el navegador no la vuelve a disparar. */
 function reanimar(nodo, clase, ms) {
   nodo.classList.remove(clase);
   void nodo.offsetWidth;           // reflow forzado
@@ -44,10 +51,22 @@ export const HUD = {
   },
 
   perderVida(restantes) {
-    const hijos = [...el.vidas.children];
-    const objetivo = hijos[restantes];
+    const objetivo = [...el.vidas.children][restantes];
     if (objetivo) objetivo.classList.add('is-perdida');
     reanimar(el.vignette, 'is-activo', 520);
+  },
+
+  setNivel(indice, total, nombre) {
+    el.nivelNum.textContent = `${indice + 1}/${total}`;
+    el.nivelNom.textContent = nombre;
+  },
+
+  /** Cartel que presenta el nivel y su pista durante ~3s. */
+  mostrarBanner(indice, nombre, pista) {
+    el.bannerNum.textContent = `NIVEL ${indice + 1}`;
+    el.bannerNom.textContent = nombre;
+    el.bannerPis.textContent = pista;
+    reanimar(el.banner, 'is-visible', 3400);
   },
 
   setTotalFragmentos(n) { el.total.textContent = `/ ${n}`; },
@@ -59,7 +78,7 @@ export const HUD = {
 
   /**
    * @param {'LUZ'|'VACIO'} dim
-   * @param {boolean} conEfecto  false al montar el nivel: sin el, la
+   * @param {boolean} conEfecto  false al montar el nivel: sin esto la
    *   pantalla daba un fogonazo nada mas empezar la partida.
    */
   setDimension(dim, conEfecto = true) {
@@ -71,7 +90,9 @@ export const HUD = {
     reanimar(el.flash, 'is-activo', 420);
   },
 
-  /** Cierra el menu con la animacion de salida y avisa al terminar. */
+  setSilencio(mudo) { el.btnSonido.classList.toggle('is-mudo', mudo); },
+
+  /** Cierra el menu con su animacion de salida y avisa al terminar. */
   cerrarMenu(alTerminar) {
     el.menu.classList.add('is-saliendo');
     setTimeout(() => {
@@ -80,11 +101,28 @@ export const HUD = {
     }, 460);
   },
 
-  mostrarFin(victoria, texto) {
-    el.finTitulo.textContent = victoria ? 'NIVEL COMPLETADO' : 'FRACTURA TOTAL';
-    el.finTitulo.classList.toggle('es-derrota', !victoria);
+  abrirMenu() {
+    el.fin.classList.remove('is-visible');
+    el.hud.classList.remove('is-visible');
+    el.menu.classList.add('is-visible');
+  },
+
+  /**
+   * @param {'nivel'|'final'|'derrota'} tipo
+   */
+  mostrarFin(tipo, texto) {
+    const titulos = {
+      nivel:   ['NIVEL COMPLETADO', 'SIGUIENTE NIVEL'],
+      final:   ['JUEGO COMPLETADO', 'JUGAR DE NUEVO'],
+      derrota: ['FRACTURA TOTAL',   'REINTENTAR'],
+    };
+    const [titulo, boton] = titulos[tipo];
+    el.finTitulo.textContent = titulo;
+    el.finTitulo.classList.toggle('es-derrota', tipo === 'derrota');
+    el.btnFin.textContent = boton;
     el.finTexto.textContent = texto;
     el.fin.classList.add('is-visible');
+
     // Reinicia la animacion de entrada del contenido
     const inner = el.fin.querySelector('.overlay__inner');
     inner.style.animation = 'none';

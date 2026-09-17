@@ -19,17 +19,34 @@
         <span class="dim-badge__label">Dimensión</span>
         <span class="dim-badge__value">LUZ</span>
       </div>
+      <div id="nivel-hud" class="nivel-hud">
+        <span class="nivel-hud__num">1/3</span>
+        <span class="nivel-hud__nombre">Primer contacto</span>
+      </div>
     </div>
 
     <div class="hud-right">
-      <div id="shards" class="shards">
-        <span class="shards__icon"></span>
-        <span class="shards__count">0</span>
-        <span class="shards__total">/ 0</span>
+      <div class="hud-fila">
+        <button id="btn-sonido" class="btn-icono" title="Silenciar (M)" aria-label="Silenciar">
+          <span class="btn-icono__on">♪</span>
+          <span class="btn-icono__off">✕</span>
+        </button>
+        <div id="shards" class="shards">
+          <span class="shards__icon"></span>
+          <span class="shards__count">0</span>
+          <span class="shards__total">/ 0</span>
+        </div>
       </div>
       <!-- Capa Canvas 2D dibujada a mano -->
       <canvas id="minimap" width="256" height="96"></canvas>
     </div>
+  </div>
+
+  <!-- Cartel de inicio de nivel (CSS) -->
+  <div id="nivel-banner" class="nivel-banner">
+    <div class="nivel-banner__num">NIVEL 1</div>
+    <div class="nivel-banner__nombre">Primer contacto</div>
+    <div class="nivel-banner__pista"></div>
   </div>
 
   <!-- Flash de cambio de dimensión (CSS) -->
@@ -43,21 +60,30 @@
       <h1 class="titulo" data-texto="FRACTURA">FRACTURA</h1>
       <p class="subtitulo">Dos dimensiones. Un solo camino.</p>
       <button id="btn-jugar" class="btn">JUGAR</button>
+
+      <div class="selector">
+        <span class="selector__etiqueta">Niveles</span>
+        <div id="selector-niveles" class="selector__botones"></div>
+      </div>
+
       <ul class="controles">
         <li><kbd>←</kbd><kbd>→</kbd> <span>mover</span></li>
         <li><kbd>Espacio</kbd> <span>saltar</span></li>
         <li><kbd>Shift</kbd> <span>cambiar de dimensión</span></li>
-        <li><kbd>R</kbd> <span>reiniciar</span></li>
+        <li><kbd>M</kbd> <span>silenciar</span> · <kbd>R</kbd> <span>reiniciar</span></li>
       </ul>
     </div>
   </div>
 
-  <!-- Fin de partida -->
+  <!-- Fin de nivel / de partida -->
   <div id="fin" class="overlay overlay--fin">
     <div class="overlay__inner">
       <h2 id="fin-titulo" class="fin-titulo">NIVEL COMPLETADO</h2>
       <p id="fin-texto" class="fin-texto"></p>
-      <button id="btn-reiniciar" class="btn">REINTENTAR</button>
+      <div class="fin-botones">
+        <button id="btn-fin" class="btn">SIGUIENTE NIVEL</button>
+        <button id="btn-menu" class="btn btn--secundario">MENÚ</button>
+      </div>
     </div>
   </div>
 

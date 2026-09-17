@@ -385,6 +385,158 @@ kbd {
   animation: entrar 620ms ease .3s both;
 }
 
+
+/* ---------- Indicador de nivel en el HUD ---------- */
+
+.nivel-hud {
+  display: flex;
+  flex-direction: column;
+  padding: 6px 14px;
+  border-left: 3px solid var(--ui-borde);
+  background: rgba(0, 0, 0, .35);
+  backdrop-filter: blur(6px);
+  transition: border-color 500ms ease;
+}
+.nivel-hud__num {
+  font-size: 9px;
+  letter-spacing: .28em;
+  opacity: .5;
+}
+.nivel-hud__nombre {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+
+/* ---------- Fila del HUD y boton de sonido ---------- */
+
+.hud-fila {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.btn-icono {
+  pointer-events: auto;
+  width: 38px;
+  display: grid;
+  place-items: center;
+  font: inherit;
+  font-size: 15px;
+  color: var(--acento);
+  background: rgba(0, 0, 0, .45);
+  border: 1px solid var(--ui-borde);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  transition: color 200ms ease, background 200ms ease, border-color 500ms ease;
+}
+.btn-icono:hover { background: rgba(255, 255, 255, .08); }
+.btn-icono__off { display: none; }
+.btn-icono.is-mudo { color: var(--peligro); }
+.btn-icono.is-mudo .btn-icono__on  { display: none; }
+.btn-icono.is-mudo .btn-icono__off { display: block; }
+
+/* ---------- Cartel de inicio de nivel ---------- */
+
+.nivel-banner {
+  position: fixed;
+  top: 32%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+}
+.nivel-banner.is-visible { animation: cartel 3.4s ease both; }
+
+.nivel-banner__num {
+  font-size: 11px;
+  letter-spacing: .5em;
+  opacity: .6;
+}
+.nivel-banner__nombre {
+  margin: 6px 0 12px;
+  font-size: clamp(26px, 5vw, 46px);
+  font-weight: 900;
+  letter-spacing: .1em;
+  color: var(--acento);
+  text-shadow: 0 0 26px var(--acento);
+}
+.nivel-banner__pista {
+  max-width: 460px;
+  margin: 0 auto;
+  font-size: 12.5px;
+  line-height: 1.5;
+  letter-spacing: .04em;
+  opacity: .75;
+}
+
+@keyframes cartel {
+  0%   { opacity: 0; transform: translateY(16px) scale(.94); filter: blur(8px); }
+  12%  { opacity: 1; transform: translateY(0)    scale(1);   filter: blur(0); }
+  78%  { opacity: 1; transform: translateY(0)    scale(1);   filter: blur(0); }
+  100% { opacity: 0; transform: translateY(-14px) scale(1.04); filter: blur(6px); }
+}
+
+/* ---------- Selector de niveles del menu ---------- */
+
+.selector {
+  margin-top: 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: entrar-fila 520ms ease .2s both;
+}
+.selector__etiqueta {
+  font-size: 9px;
+  letter-spacing: .38em;
+  text-transform: uppercase;
+  opacity: .45;
+}
+.selector__botones { display: flex; gap: 8px; }
+
+.btn-nivel {
+  width: 46px;
+  height: 38px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--texto);
+  background: transparent;
+  border: 1px solid var(--ui-borde);
+  cursor: pointer;
+  transition: transform 160ms ease, background 200ms ease, color 200ms ease;
+}
+.btn-nivel:hover:not(:disabled) {
+  background: var(--acento);
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+.btn-nivel:disabled {
+  opacity: .32;
+  cursor: not-allowed;
+  border-style: dashed;
+}
+.btn-nivel.es-completado { border-color: var(--oro); color: var(--oro); }
+
+/* ---------- Botones de la pantalla final ---------- */
+
+.fin-botones {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn--secundario {
+  padding: 15px 30px;
+  font-size: 13px;
+  border-color: var(--ui-borde);
+  animation: none;
+}
+.btn--secundario::after { display: none; }
+.btn--secundario:hover { background: rgba(255, 255, 255, .1); color: var(--texto); }
+
 /* Respeta a quien prefiere menos movimiento */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

@@ -26,12 +26,23 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.coyote = 0;         // ms restantes de coyote time
     this.buffer = 0;         // ms restantes del salto "bufferizado"
     this.invulnerable = 0;   // ms restantes de invulnerabilidad
+    this.tiempoEnAire = 0;   // para no sonar el aterrizaje en cada roce
+    this.enSueloPrevio = true;
     this.spawn = { x, y };
   }
 
   update(input, dt) {
     const body = this.body;
     const enSuelo = body.blocked.down || body.touching.down;
+
+    // --- Aterrizaje -----------------------------------------
+    // Solo suena si venia de estar un rato en el aire: si no, un
+    // simple roce contra un borde dispararia el efecto sin parar.
+    if (enSuelo && !this.enSueloPrevio && this.tiempoEnAire > 180) {
+      this.scene.events.emit('jugador:aterriza');
+    }
+    this.tiempoEnAire = enSuelo ? 0 : this.tiempoEnAire + dt;
+    this.enSueloPrevio = enSuelo;
 
     // --- Temporizadores -------------------------------------
     this.coyote = enSuelo ? FISICA.COYOTE_MS : Math.max(0, this.coyote - dt);
@@ -87,9 +98,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   reaparecer() {
-    this.setPosition(this.spawn.x, this.spawn.y);
-    this.setVelocity(0, 0);
+    // OJO: setPosition() mueve el sprite pero NO reubica el cuerpo de
+    // Arcade: body.prev se queda en la posicion anterior y la siguiente
+    // resolucion de colisiones arrastra al jugador de vuelta. body.reset()
+    // es el teletransporte correcto (coloca posicion, prev y velocidad).
+    this.body.reset(this.spawn.x, this.spawn.y);
+    this.setAcceleration(0, 0);
     this.setAlpha(1);
     this.invulnerable = 900;
+    this.tiempoEnAire = 0;
+    this.enSueloPrevio = true;
   }
 }

@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { TILE } from '../level.js';
+import { TILE } from '../levels.js';
 
 /* Genera todas las texturas por codigo con Phaser.Graphics.
    Ventaja para un proyecto de clase: cero archivos de imagen,
